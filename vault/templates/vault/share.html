@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptVault - Share & Collaborate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #e5e7eb;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at top left, rgba(196, 118, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at top right, rgba(255, 118, 217, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom center, rgba(118, 255, 196, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .premium-glass {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 50%, #76fff0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-button {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(196, 118, 255, 0.3);
+        }
+        
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .gradient-button:hover::before {
+            left: 100%;
+        }
+        
+        .gradient-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(196, 118, 255, 0.4);
+        }
+        
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(196, 118, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(196, 118, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(196, 118, 255, 0.4);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.7; }
+            25% { transform: translateY(-30px) rotate(90deg) scale(1.1); opacity: 1; }
+            50% { transform: translateY(-15px) rotate(180deg) scale(0.9); opacity: 0.8; }
+            75% { transform: translateY(-25px) rotate(270deg) scale(1.05); opacity: 0.9; }
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .copy-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Copy Notification -->
+    <div id="copyNotification" class="copy-notification">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Link copied to clipboard!
+        </div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle w-3 h-3" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="particle w-2 h-2" style="top: 20%; left: 90%; animation-delay: 1s;"></div>
+        <div class="particle w-4 h-4" style="top: 40%; left: 10%; animation-delay: 2s;"></div>
+        <div class="particle w-1 h-1" style="top: 60%; left: 85%; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="glass-effect backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-button rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">CryptVault</span>
+                </div>
+               <div class="hidden md:flex items-center space-x-8">
+          
+                    <a href="{% url 'vault_home' %}" class="nav-item text-white/80 hover:text-white font-medium">Dashboard</a>
+                                 <a href="{% url 'privacy' %}" class="text-white/80 hover:text-white transition-colors">Privacy Policy</a>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 gradient-text">Share CryptVault</h1>
+            <p class="text-xl text-white/70 mb-8 max-w-3xl mx-auto">
+                Help others discover enterprise-grade password security. Share CryptVault with your team, organization, or network and strengthen cybersecurity across your community.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="copyShareLink()" class="gradient-button text-white px-8 py-4 rounded-lg font-semibold">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                    </svg>
+                    Copy Share Link
+                </button>
+                <a href="#download-section" class="secondary-button text-white px-8 py-4 rounded-lg font-semibold inline-block">
+                    View Download Options
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white">Why Share CryptVault?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card p-8 rounded-xl">
+                    <div class="w-16 h-16 gradient-button rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Enterprise Security</h3>
+                    <p class="text-white/70">Help others protect their digital assets with military-grade encryption and zero-knowledge architecture.</p>
+                </div>
+  
+<div class="feature-card p-8 rounded-xl">
+    <div class="w-16 h-16 gradient-button rounded-full flex items-center justify-center mb-6">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path>
+        </svg>
+    </div>
+    <h3 class="text-xl font-bold mb-4 text-white">Privacy Protection</h3>
+    <p class="text-white/70">Zero-knowledge architecture ensures your data remains private with end-to-end encryption and local storage.</p>
+</div>
+                <div class="feature-card p-8 rounded-xl">
+                    <div class="w-16 h-16 gradient-button rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Instant Setup</h3>
+                    <p class="text-white/70">Quick deployment with seamless browser integration and cross-platform compatibility.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Options Section -->
+    <section id="download-section" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="premium-glass rounded-2xl p-12">
+                <h2 class="text-3xl font-bold text-center mb-12 gradient-text">Distribution Options</h2>
+                
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Desktop Application -->
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 gradient-button rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Desktop Application</h3>
+                        </div>
+                        <p class="text-white/80 leading-relaxed">
+                            The core CryptVault application with local database storage, advanced encryption, and comprehensive password management features.
+                        </p>
+                        <div class="bg-white/5 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <code class="text-purple-300 text-sm break-all">https://cryptvault.vipul-iiitd.in/</code>
+                                <button onclick="copyToClipboard('https://cryptvault.vipul-iiitd.in/')" class="secondary-button px-4 py-2 rounded-lg ml-4 flex-shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                     
+                    </div>
+                    
+                    <!-- Browser Extension -->
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 gradient-button rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Browser Extension</h3>
+                        </div>
+                        <p class="text-white/80 leading-relaxed">
+                            Seamless browser integration for autofill, secure form completion, and direct communication with the desktop application.
+                        </p>
+                        <div class="space-y-3">
+                            <a href="https://chrome.google.com/webstore" target="_blank" class="bg-white/5 rounded-lg p-4 flex items-center justify-between hover:bg-white/10 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-white">Chrome Web Store</span>
+                                </div>
+                                <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                            
+                        </div>
+                        <div class="flex space-x-4">
+     
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Share Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 text-white">Share on Social Media</h2>
+                <p class="text-white/70 max-w-2xl mx-auto">Spread the word about secure password management across your professional network and social circles.</p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#" onclick="shareOn('twitter')" class="secondary-button px-6 py-4 rounded-lg flex items-center space-x-3 hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                    </svg>
+                    <span class="text-white font-medium">Twitter</span>
+                </a>
+                
+                <a href="#" onclick="shareOn('linkedin')" class="secondary-button px-6 py-4 rounded-lg flex items-center space-x-3 hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                    </svg>
+                    <span class="text-white font-medium">LinkedIn</span>
+                </a>
+                
+                <a href="#" onclick="shareOn('facebook')" class="secondary-button px-6 py-4 rounded-lg flex items-center space-x-3 hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span class="text-white font-medium">Facebook</span>
+                </a>
+                
+                <a href="#" onclick="shareOn('slack')" class="secondary-button px-6 py-4 rounded-lg flex items-center space-x-3 hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+                    </svg>
+                    <span class="text-white font-medium">Slack</span>
+                </a>
+                
+                <a href="#" onclick="shareOn('teams')" class="secondary-button px-6 py-4 rounded-lg flex items-center space-x-3 hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.5c0-1.933-1.567-3.5-3.5-3.5S17 10.567 17 12.5s1.567 3.5 3.5 3.5S24 14.433 24 12.5z M17 12.5c0-1.933-1.567-3.5-3.5-3.5S10 10.567 10 12.5s1.567 3.5 3.5 3.5S17 14.433 17 12.5z M10 12.5c0-1.933-1.567-3.5-3.5-3.5S3 10.567 3 12.5s1.567 3.5 3.5 3.5S10 14.433 10 12.5z"/>
+                    </svg>
+                    <span class="text-white font-medium">Teams</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Solutions Section -->
+
+
+    <!-- Notification -->
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 gradient-button rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">CryptVault</span>
+                    </div>
+                    <p class="text-white/70 text-sm">
+                        Enterprise-grade password security that runs locally on your devices.
+                    </p>
+                </div>
+                
+        
+            <div class="border-t border-white/10 mt-8 pt-8 text-center">
+                <p class="text-white/50 text-sm">
+                    © 2025 CryptVault. All rights reserved. Built with security and privacy first.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showNotification(message) {
+            const notification = document.getElementById('copyNotification');
+            notification.querySelector('div').innerHTML = `
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                ${message}
+            `;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Link copied to clipboard!');
+            });
+        }
+
+        function copyShareLink() {
+            const shareText = "Discover CryptVault - Enterprise-grade password security that runs locally on your devices. Get the desktop app and browser extension: https://cryptvault.vipul-iiitd.in/";
+            copyToClipboard(shareText);
+        }
+
+        function downloadQR(type) {
+            const url = type === 'desktop' ? 'https://cryptvault.vipul-iiitd.in/' : 'https://chrome.google.com/webstore/detail/cryptvault';
+            
+            // Create a simple QR code placeholder
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 200;
+            
+            // Simple QR code pattern (placeholder)
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, 200, 200);
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(10, 10, 180, 180);
+            ctx.fillStyle = '#000';
+            
+            // Create download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `cryptvault-${type}-qr.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+            
+            showNotification('QR Code downloaded!');
+        }
+
+        function shareViaEmail(type) {
+            const subject = encodeURIComponent('Check out CryptVault - Secure Password Manager');
+            const body = encodeURIComponent(
+                type === 'desktop' 
+                ? `I wanted to share CryptVault with you - it's a secure password manager that runs locally on your device.\n\nDownload: https://cryptvault.vipul-iiitd.in/\n\nIt offers enterprise-grade security with zero-knowledge encryption and works seamlessly across all your devices.`
+                : `I wanted to share the CryptVault browser extension with you - it makes password management seamless and secure.\n\nGet it here: https://chrome.google.com/webstore/detail/cryptvault\n\nIt works perfectly with the desktop app for complete password security.`
+            );
+            
+            window.open(`mailto:?subject=${subject}&body=${body}`);
+        }
+
+        function shareOn(platform) {
+            const url = encodeURIComponent('https://cryptvault.example.com');
+            const text = encodeURIComponent('Discover CryptVault - Enterprise-grade password security that runs locally on your devices. #CyberSecurity #PasswordManager #Privacy');
+            
+            const urls = {
+                twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+                slack: `slack://channel?team=&channel=&message=${text} ${url}`,
+                teams: `https://teams.microsoft.com/share?href=${url}&msgText=${text}`
+            };
+            
+            if (platform === 'slack' || platform === 'teams') {
+                copyToClipboard(`${decodeURIComponent(text)} ${decodeURIComponent(url)}`);
+                showNotification(`Message copied! Paste it in ${platform.charAt(0).toUpperCase() + platform.slice(1)}.`);
+            } else {
+                window.open(urls[platform], '_blank', 'width=600,height=400');
+            }
+        }
+
+        function downloadEnterpriseKit() {
+            // Simulate download
+            showNotification('Enterprise kit download started!');
+        }
+
+        function openChat() {
+            // Simulate chat opening
+            showNotification('Chat support will be available soon!');
+        }
+    </script>
+</body>
+</html>

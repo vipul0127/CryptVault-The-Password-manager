@@ -1,0 +1,33 @@
+{% extends "vault/base.html" %}
+{% block title %}Password Search{% endblock %}
+{% block content %}
+<h2>Search Passwords</h2>
+<form method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Enter website URL (e.g., example.com)" class="form-control mb-2">
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+{% if entries %}
+  <table class="table mt-3">
+    <thead>
+      <tr><th>Service</th><th>Username</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry.service }}</td>
+          <td>{{ entry.username }}</td>
+          <td><button class="btn btn-primary btn-sm" onclick="autofill({{ entry.id }})">Autofill</button></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No matching entries found.</p>
+{% endif %}
+<script>
+function autofill(entryId) {
+  // Placeholder for extension integration
+  alert('Autofill triggered for entry ' + entryId);
+}
+</script>
+{% endblock %}

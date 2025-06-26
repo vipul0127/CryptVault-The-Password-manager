@@ -1,0 +1,39 @@
+{% extends "vault/base.html" %}
+{% block title %}First-Time Registration - Welcome{% endblock %}
+{% block content %}
+<div class="mx-auto" style="max-width: 480px;">
+
+  <h2 class="text-primary fw-bold mb-3">Welcome to SecurePass Vault!</h2>
+
+  <p class="fs-5">
+    This is a <strong>one-time registration</strong>. Please register your username and a <strong>master password</strong> below.
+  </p>
+  <p class="text-danger fw-semibold">
+    <strong>Important:</strong> Remember your username and password! They are required to access your vault, and cannot be recovered if lost.
+  </p>
+
+  <form method="post" novalidate aria-label="First time registration form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+        {{ field|add_class:"form-control form-control-lg shadow-sm" }}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text|safe }}</div>
+        {% endif %}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg shadow">Register and Get Started</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

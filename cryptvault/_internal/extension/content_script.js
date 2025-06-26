@@ -1,0 +1,1 @@
+console.log('CryptVault content script loaded');

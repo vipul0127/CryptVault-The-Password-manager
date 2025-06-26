@@ -1,0 +1,13 @@
+{% extends "vault/base.html" %}
+{% block title %}Educational Labels{% endblock %}
+{% block content %}
+<h2>How Each Cipher Works</h2>
+<ul class="list-group">
+  {% for c in ciphers %}
+    <li class="list-group-item">
+      <h5>{{ c.name }}</h5>
+      <p>{{ c.desc }}</p>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

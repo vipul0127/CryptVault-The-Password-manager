@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptVault - Privacy Policy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #16213e 75%, #1a1a2e 100%);
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #e5e7eb;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at top left, rgba(196, 118, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at top right, rgba(255, 118, 217, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom center, rgba(118, 255, 196, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .premium-glass {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 50%, #76fff0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-button {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(196, 118, 255, 0.3);
+        }
+        
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .gradient-button:hover::before {
+            left: 100%;
+        }
+        
+        .gradient-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(196, 118, 255, 0.4);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(196, 118, 255, 0.4);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.7; }
+            25% { transform: translateY(-30px) rotate(90deg) scale(1.1); opacity: 1; }
+            50% { transform: translateY(-15px) rotate(180deg) scale(0.9); opacity: 0.8; }
+            75% { transform: translateY(-25px) rotate(270deg) scale(1.05); opacity: 0.9; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle w-3 h-3" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="particle w-2 h-2" style="top: 20%; left: 90%; animation-delay: 1s;"></div>
+        <div class="particle w-4 h-4" style="top: 40%; left: 10%; animation-delay: 2s;"></div>
+        <div class="particle w-1 h-1" style="top: 60%; left: 85%; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="glass-effect backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-button rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">CryptVault</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="{% url 'vault_home' %}" class="text-white/80 hover:text-white transition-colors">Home</a>
+                 
+                    <a href="{% url 'extension_guide' %}" class="text-white/80 hover:text-white transition-colors">Extension Guide</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Privacy Policy Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center gradient-text">Privacy Policy</h1>
+            <div class="premium-glass p-6 max-w-4xl mx-auto">
+                <p class="text-white/70 mb-4">
+                    At CryptVault, your privacy is our top priority. This Privacy Policy outlines how we protect your information when using our password management application and its browser extension. Built on principles of trust and security, we adhere to stringent data protection standards.
+                </p>
+                <h3 class="text-xl font-bold mb-2">1. Information We Collect</h3>
+                <p class="text-white/70 mb-4">
+                    CryptVault collects only the credentials (usernames, passwords, and associated URLs) you choose to store in the application. These are encrypted using AES-256 encryption and stored locally in a SQLite database on your device. The browser extension communicates with the application’s local server (http://127.0.0.1:8000) to retrieve credentials. No personal data is transmitted to external servers.
+                </p>
+                <h3 class="text-xl font-bold mb-2">2. How We Use Your Data</h3>
+                <p class="text-white/70 mb-4">
+                    Your data is used exclusively for storing, retrieving, and autofilling credentials within the CryptVault application and its browser extension. We do not collect analytics, track usage, or share your data with third parties, ensuring all operations remain local to your device.
+                </p>
+                <h3 class="text-xl font-bold mb-2">3. Data Security Measures</h3>
+                <p class="text-white/70 mb-4">
+                    We employ AES-256 encryption to secure your credentials in the SQLite database. The application requires a master password for access, which is cached securely during sessions. The browser extension operates under Chrome Manifest V3 guidelines, using secure communication with the local server. If your master password is lost, recovery is not possible to maintain security.
+                </p>
+                <h3 class="text-xl font-bold mb-2">4. Your Rights and Choices</h3>
+                <p class="text-white/70 mb-4">
+                    You have full control over your data. You can delete all stored credentials by removing the SQLite database file or uninstalling the application. For inquiries or data access requests, contact our support team at <a href="mailto:support@cryptvault.vipul-iiitd.in" class="text-purple-400 hover:text-purple-300">support@cryptvault.vipul-iiitd.in</a>. We will respond within 48 hours.
+                </p>
+                <h3 class="text-xl font-bold mb-2">5. Data Retention</h3>
+                <p class="text-white/70 mb-4">
+                    Your data is retained locally only as long as you use the CryptVault application. Uninstalling the application or deleting the database file permanently removes all data from your device, with no backups stored elsewhere.
+                </p>
+                <h3 class="text-xl font-bold mb-2">6. Third-Party Services</h3>
+                <p class="text-white/70 mb-4">
+                    CryptVault does not use third-party services for data processing. Any future features requiring external services (e.g., optional cloud backup) will include clear disclosures and require your explicit consent.
+                </p>
+                <h3 class="text-xl font-bold mb-2">7. Children’s Privacy</h3>
+                <p class="text-white/70 mb-4">
+                    Our application is not intended for individuals under 13. We do not knowingly collect data from children. If such data is detected, it will be deleted immediately.
+                </p>
+                <h3 class="text-xl font-bold mb-2">8. Changes to This Policy</h3>
+                <p class="text-white/70 mb-4">
+                    We may update this policy as the CryptVault application evolves. Significant changes will be communicated through the application’s interface, with the updated policy effective from the date noted above. We regularly review our practices to comply with global privacy standards.
+                </p>
+                <p class="text-white/70">
+                    For further details or to exercise your rights, contact us at <a href="mailto:support@cryptvault.vipul-iiitd.in" class="text-purple-400 hover:text-purple-300">support@cryptvault.vipul-iiitd.in</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center">
+        <p class="text-white/50 text-sm">© 2025 CryptVault. All rights reserved. <a href="{% url 'privacy' %}" class="text-purple-400 hover:text-purple-300 transition-colors">Privacy Policy</a> | <a href="{% url 'extension_guide' %}" class="text-purple-400 hover:text-purple-300 transition-colors">Extension Guide</a> | <a href="{% url 'vault_home' %}" class="text-purple-400 hover:text-purple-300 transition-colors">Home</a></p>
+    </footer>
+</body>
+</html>

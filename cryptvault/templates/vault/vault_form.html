@@ -1,0 +1,63 @@
+{% extends "vault/base.html" %}
+{% block title %}{% if editing %}Edit{% else %}Add{% endif %} Entry{% endblock %}
+{% block content %}
+<h2>{% if editing %}Edit{% else %}Add{% endif %} Password Entry</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="mb-3">
+    <label>Password</label>
+    <input type="password" required id="plaintext_password" name="plaintext_password" class="form-control" value="{{ plaintext_password|default_if_none:'' }}" autocomplete="new-password"/>
+    <div class="password-strength-meter mt-1"><div id="strength-bar" class="password-strength-bar"></div></div>
+    <small id="strength-text"></small>
+    <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="generatePassword()">Generate Strong Password</button>
+  </div>
+  <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Save{% endif %}</button>
+  <a href="{% url 'vault_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+
+<script>
+const strengthBar = document.getElementById('strength-bar');
+const strengthText = document.getElementById('strength-text');
+const pwInput = document.getElementById('plaintext_password');
+
+pwInput.addEventListener('input', () => {
+  fetch('{% url "password_strength_api" %}?password=' + encodeURIComponent(pwInput.value))
+    .then(r => r.json())
+    .then(data => {
+      const score = data.score;
+      strengthBar.style.width = ((score/4)*100) + '%';
+      let color = ['#dc3545', '#fd7e14', '#ffc107', '#198754', '#0d6efd'][score];
+      strengthBar.style.backgroundColor = color;
+      strengthText.textContent = data.feedback.join(' ') || 'Strong password.';
+    });
+});
+
+function generatePassword(){
+  const length = 16;
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+  let password = "";
+  for(let i=0;i<length;i++){
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  pwInput.value = password;
+  pwInput.dispatchEvent(new Event('input'));
+}
+
+// Trigger initial strength check
+pwInput.dispatchEvent(new Event('input'));
+
+// Show/hide caesar_shift only for CAESAR
+const encSelect = document.getElementById("id_encryption_type");
+function toggleShiftField(){
+  const shiftField = document.getElementById("id_caesar_shift").parentElement;
+  if(encSelect.value==="CAESAR"){
+    shiftField.style.display = "block";
+  }else{
+    shiftField.style.display = "none";
+  }
+}
+encSelect.addEventListener('change', toggleShiftField);
+toggleShiftField();
+</script>
+{% endblock %}

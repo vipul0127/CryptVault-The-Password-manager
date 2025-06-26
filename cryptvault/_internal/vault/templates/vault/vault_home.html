@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CryptVault</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'vault_home' %}">CryptVault</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'encryption_demo' %}">Encryption Demo</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'password_cracker' %}">Cracker Simulator</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'password_strength_game' %}">Strength Game</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'educational_labels' %}">Learn</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'caesar_rotator' %}">Caesar Rotator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="install-extension-btn">Install Browser Extension</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'invisible_ink_toggle' %}">Toggle Invisible Ink</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout ({{ user.username }})</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <h2>Your Password Vault</h2>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search..." name="q" value="{{ q }}">
+      </div>
+      <div class="col-md-4">
+        <select class="form-control" name="encryption_type">
+          <option value="">All Encryption Types</option>
+          {% for code, name in encryption_types %}
+            <option value="{{ code }}" {% if enc_filter == code %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+      <div class="col-md-2">
+        <a href="{% url 'vault_add' %}" class="btn btn-success">Add New</a>
+      </div>
+    </div>
+
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th>Service</th><th>Username</th><th>Password</th><th>Encryption</th><th>Notes</th><th>Tags</th><th>Steg Images</th><th>Steg Password(s)</th><th>Created</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+          <tr>
+            <td>{{ entry.service }}</td>
+            <td>{{ entry.username }}</td>
+            <td>
+              ••••••••
+              <button class="btn btn-link show-hide-btn" data-entry-id="{{ entry.id }}">Show/Hide</button>
+            </td>
+            <td>{{ entry.get_encryption_type_display }}</td>
+            <td>{{ entry.notes|linebreaksbr }}</td>
+            <td>{{ entry.tags }}</td>
+            <td>
+              {% for img in entry.steg_images.all %}
+                <a href="{{ img.image.url }}">View</a>
+              {% empty %}
+                None
+              {% endfor %}
+            </td>
+            <td>
+              {% if decrypted_steg_passwords.entry.id %}
+                {% for spwd in decrypted_steg_passwords.entry.id %}
+                  ••••••••
+                  <button class="btn btn-link show-hide-steg-btn" data-steg-id="{{ spwd.id }}">Show/Hide</button>
+                {% endfor %}
+              {% else %}
+                None
+              {% endif %}
+            </td>
+            <td>{{ entry.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+              <a href="{% url 'vault_edit' entry.id %}" class="btn btn-sm btn-primary">Edit</a>
+              <a href="{% url 'vault_delete' entry.id %}" class="btn btn-sm btn-danger">Delete</a>
+              <a href="{% url 'steg_upload' entry.id %}" class="btn btn-sm btn-info">Upload Steg</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="10">No entries yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {{ decrypted_passwords|json_script:"decrypted-passwords" }}
+  {{ decrypted_steg_passwords|json_script:"decrypted-steg-passwords" }}
+
+  <script>
+    // Existing show/hide password logic
+    document.querySelectorAll('.show-hide-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const entryId = btn.dataset.entryId;
+        const password = JSON.parse(document.getElementById('decrypted-passwords').textContent)[entryId];
+        btn.previousElementSibling.textContent = btn.textContent === 'Show' ? password : '••••••••';
+        btn.textContent = btn.textContent === 'Show' ? 'Hide' : 'Show';
+      });
+    });
+
+    // Install extension button logic
+    document.getElementById('install-extension-btn').addEventListener('click', () => {
+      alert('To install the CryptVault extension:\n1. Open Chrome and go to chrome://extensions\n2. Enable "Developer mode"\n3. Click "Load unpacked" and select the "extension" folder from the CryptVault app directory\n4. The extension will register itself automatically.');
+    });
+  </script>
+</body>
+</html>

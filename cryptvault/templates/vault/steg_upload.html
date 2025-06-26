@@ -1,0 +1,12 @@
+{% extends "vault/base.html" %}
+{% block title %}Steganographic Image Upload{% endblock %}
+{% block content %}
+<h2>Upload Image to Store Password Steganographically</h2>
+<p>Upload an image to hide your encrypted password inside (future feature for real steganography).</p>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary" type="submit">Upload</button>
+  <a href="{% url 'vault_home' %}" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+{% endblock %}

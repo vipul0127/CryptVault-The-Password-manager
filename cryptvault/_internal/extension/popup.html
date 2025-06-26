@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CryptVault Autofill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      width: 350px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+    }
+    .form-control {
+      background-color: #2d3748;
+      color: #fff;
+      border: 1px solid #4b5563;
+    }
+    .btn-primary {
+      background-color: #2563eb;
+      border-color: #2563eb;
+    }
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+    }
+    .alert {
+      font-size: 0.9em;
+    }
+    .fadeIn {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="fadeIn">
+  <div class="container">
+    <h5 class="mb-3">CryptVault Autofill</h5>
+    <div id="auth-section">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter username">
+      </div>
+      <div class="mb-3">
+        <label for="master-password" class="form-label">Master Password</label>
+        <input type="password" class="form-control" id="master-password" placeholder="Enter master password">
+      </div>
+      <button class="btn btn-primary w-100" id="login-btn">Login</button>
+      <div id="auth-error" class="alert alert-danger mt-2 d-none"></div>
+    </div>
+    <div id="search-section" class="d-none">
+      <div class="mb-3">
+        <label for="service-url" class="form-label">Service URL</label>
+        <input type="text" class="form-control" id="service-url" placeholder="e.g., https://example.com">
+      </div>
+      <button class="btn btn-primary w-100 mb-2" id="search-btn">Search Credentials</button>
+      <div id="results" class="mt-2"></div>
+      <button class="btn btn-secondary w-100 mt-2" id="logout-btn">Logout</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<div id="search-content">
+    <style>
+        .search-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .search-header {
+            text-align: center;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+        }
+        
+        .search-title {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+        
+        .search-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .search-form {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .search-input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #c476ff;
+            box-shadow: 0 0 0 3px rgba(196, 118, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .search-button {
+            width: 100%;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 118, 255, 0.4);
+        }
+        
+        .search-button svg {
+            margin-right: 8px;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 20px;
+            font-size: 13px;
+            color: #fca5a5;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .results-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 8px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .results-table th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        
+        .results-table tbody tr {
+            transition: all 0.2s ease;
+        }
+        
+        .results-table tbody tr:hover {
+            background: rgba(196, 118, 255, 0.05);
+            transform: scale(1.01);
+        }
+        
+        .service-cell {
+            display: flex;
+            align-items: center;
+        }
+        
+        .service-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .service-name {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .username-cell {
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .autofill-btn {
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+        }
+        
+        .autofill-btn:hover {
+            background: rgba(34, 197, 94, 1);
+            transform: translateY(-1px);
+        }
+        
+        .show-btn {
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+        }
+        
+        .show-btn:hover {
+            background: rgba(59, 130, 246, 1);
+            transform: translateY(-1px);
+        }
+        
+        .credentials {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #c476ff;
+        }
+        
+        .credentials.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .credential-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .credential-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .credential-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            margin-right: 12px;
+        }
+        
+        .credential-value {
+            flex: 1;
+            color: white;
+            font-family: 'Monaco', 'Consolas', monospace;
+            margin-right: 8px;
+        }
+        
+        .copy-btn {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .no-results-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            opacity: 0.5;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 200px; }
+        }
+        
+        .results-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .results-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .results-container::-webkit-scrollbar-thumb {
+            background: rgba(196, 118, 255, 0.5);
+            border-radius: 3px;
+        }
+        
+        .results-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(196, 118, 255, 0.7);
+        }
+        
+        .action-btn svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
+        }
+    </style>
+    
+    <div class="search-container">
+        <!-- Header -->
+        <div class="search-header">
+            <div class="search-title">Password Search</div>
+            <div class="search-subtitle">Find and access your secured credentials</div>
+        </div>
+        
+        <!-- Search Form -->
+        <div class="search-form">
+            <div class="search-input-group">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" id="url" class="search-input" placeholder="Enter website URL or domain name">
+            </div>
+            
+            <button id="searchButton" class="search-button">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Search Passwords
+            </button>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="error" class="error-message"></div>
+        
+        <!-- Results -->
+        <div class="results-container">
+            <table id="results" class="results-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Username</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            
+            <!-- No Results State -->
+            <div id="no-results" class="no-results" style="display: none;">
+                <svg class="no-results-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 20.4a7.962 7.962 0 01-5-1.691c0-2.796.83-5.395 2.291-7.709zM15 11.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <div style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">No passwords found</div>
+                <div style="font-size: 12px; opacity: 0.7;">Try a different search term or add a password entry in CryptVault</div>
+            </div>
+        </div>
+    </div>
+</div>

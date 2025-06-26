@@ -1,0 +1,33 @@
+{% extends "vault/base.html" %}
+{% block title %}Encryption Demo{% endblock %}
+{% block content %}
+<h2>Encryption Demo (AES and RSA)</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="mb-3">
+    <label>Text to encrypt</label>
+    <textarea name="plaintext" class="form-control" rows="3">{{ request.POST.plaintext }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label>Algorithm</label>
+    <select name="algorithm" class="form-select">
+      <option value="AES" {% if request.POST.algorithm == "AES" %}selected{% endif %}>AES</option>
+      <option value="RSA" {% if request.POST.algorithm == "RSA" %}selected{% endif %}>RSA</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">Encrypt</button>
+</form>
+
+{% if demo_result %}
+  <h3>Result:</h3>
+  {% if demo_result.algorithm == 'AES' %}
+    <p><b>IV (base64):</b> {{ demo_result.iv }}</p>
+    <p><b>Ciphertext (base64):</b> {{ demo_result.ciphertext }}</p>
+  {% elif demo_result.algorithm == 'RSA' %}
+    <p><b>Public Key:</b> <pre>{{ demo_result.public_key }}</pre></p>
+    <p><b>Private Key:</b> <pre>{{ demo_result.private_key }}</pre></p>
+    <p><b>Ciphertext (base64):</b> {{ demo_result.ciphertext }}</p>
+    <p><b>Decrypted Text:</b> {{ demo_result.plaintext_decrypted }}</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

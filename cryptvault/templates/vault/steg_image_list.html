@@ -1,0 +1,18 @@
+{% extends "vault/base.html" %}
+{% block title %}Steganographic Images for {{ entry.service }}{% endblock %}
+{% block content %}
+<h2>Images for {{ entry.service }} ({{ entry.username }})</h2>
+<a href="{% url 'vault_home' %}" class="btn btn-secondary mb-3">Back to Vault</a>
+<ul class="list-inline">
+  {% for img in images %}
+    <li class="list-inline-item m-2">
+      <a href="{{ img.image.url }}" target="_blank">
+        <img src="{{ img.image.url }}" alt="Steg Image" style="max-height:150px; border:1px solid #ccc;"/>
+      </a><br/>
+      Uploaded at: {{ img.uploaded_at|date:"Y-m-d H:i" }}
+    </li>
+  {% empty %}
+    <li>No images uploaded yet for this entry.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

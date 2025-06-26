@@ -1,0 +1,302 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First-Time Registration - CryptVault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top right, rgba(196, 118, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom left, rgba(255, 118, 217, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-button {
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .gradient-button:hover::before {
+            left: 100%;
+        }
+        
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(196, 118, 255, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(196, 118, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(-15px) rotate(240deg); }
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #c476ff;
+            box-shadow: 0 0 0 3px rgba(196, 118, 255, 0.3);
+            outline: none;
+        }
+        
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .nav-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #c476ff 0%, #ff76d9 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-item:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle w-2 h-2" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle w-1 h-1" style="top: 40%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle w-3 h-3" style="top: 60%; left: 20%; animation-delay: 4s;"></div>
+        <div class="particle w-1 h-1" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
+        <div class="particle w-2 h-2" style="top: 10%; left: 60%; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="glass-effect backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-button rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">CryptVault</span>
+                </div>
+
+                <!-- Navigation Items -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/welcome/" class="nav-item text-white/80 hover:text-white font-medium">Home</a>
+                    <a href="/welcome/#features" class="nav-item text-white/80 hover:text-white font-medium">Features</a>
+                    <a href="/welcome/#use-cases" class="nav-item text-white/80 hover:text-white font-medium">Use Cases</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-12 relative z-10">
+        <!-- Intro Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <span class="gradient-text">First-Time Registration</span>
+            </h1>
+            <p class="text-white/80 text-lg md:text-xl max-w-2xl mx-auto">
+                Welcome to CryptVault! Set up your secure offline password vault by registering your master credentials. Your data stays safe and private on your device.
+            </p>
+        </div>
+
+        <!-- Registration Form Card -->
+        <div class="glass-effect p-8 rounded-2xl card-hover w-full max-w-md mx-auto">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="glass-effect rounded-xl p-4 border-l-4 border-red-400 mb-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-red-300 text-sm">{{ message }}</span>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" class="text-white/50 hover:text-white">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Warning -->
+            <div class="mb-6">
+                <div class="glass-effect rounded-xl p-4 border-l-4 border-yellow-400">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <div>
+                            <p class="text-yellow-300 font-medium">Important:</p>
+                            <p class="text-white/80 text-sm">
+                                This is a one-time registration. Remember your security question and answer—they are required for password recovery.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form method="post" novalidate class="space-y-4">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="glass-effect rounded-xl p-4 border-l-4 border-red-400 mb-2">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-red-300 text-sm">{{ form.non_field_errors|striptags }}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-white/80">
+                        {{ field.label }}
+                    </label>
+                    <div class="mt-1">
+                        {% render_field field class="input-field w-full px-4 py-3 rounded-xl focus:outline-none placeholder-white/50" placeholder=field.label %}
+                    </div>
+                    {% if field.help_text %}
+                    <div class="text-white/60 text-sm mt-1">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                    <div class="text-red-300 text-sm mt-1">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="w-full gradient-button text-white py-3 px-4 rounded-xl font-medium">
+                    Register and Get Started
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-6 mt-12">
+            <a href="/privacy-policy/" class="text-purple-400 hover:text-purple-300 transition-colors text-sm">Privacy Policy</a>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add animations to the form card
+            const card = document.querySelector('.card-hover');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').split('#')[1];
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        window.location.href = this.getAttribute('href');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

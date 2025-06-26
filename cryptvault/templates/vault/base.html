@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CryptVault - {% block title %}{% endblock %}</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+  /* Invisible Ink: white text on white background */
+  .invisible-ink { color: white; background-color: white; user-select:text; }
+  .password-strength-meter {
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+  }
+  .password-strength-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+</style>
+{% block head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'vault_home' %}">CryptVault</a>
+    <div class="collapse navbar-collapse d-flex justify-content-end">
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'encryption_demo' %}">Encryption Demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'password_cracker_simulator' %}">Cracker Simulator</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'password_strength_game' %}">Strength Game</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'educational_labels' %}">Learn</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'caesar_rotator' %}">Caesar Rotator</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'browser_addon' %}">Browser Addon</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'toggle_invisible_ink' %}">Toggle Invisible Ink</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout ({{ user.username }})</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mt-1">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

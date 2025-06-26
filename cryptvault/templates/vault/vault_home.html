@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vault</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .invisible-ink { color: transparent; user-select: none; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">CryptVault</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            {% comment %} <li class="nav-item"><a class="nav-link" href="#">Encryption Demo</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Cracker Simulator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Strength Game</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Learn</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Caesar Rotator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Browser Addon</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Toggle Invisible Ink</a></li> {% endcomment %}
+            <li class="nav-item"><a class="nav-link" href="#">Logout ({{ user.username }})</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <h2>Your Password Vault</h2>
+    <form class="row mb-3" method="get">
+      <div class="col-md-4 mb-2">
+        <input type="text" class="form-control" placeholder="Search service or notes" name="q" value="{{ q }}">
+      </div>
+      <div class="col-md-3 mb-2">
+        <select class="form-select" name="encryption_type">
+          <option value="">All Encryption Types</option>
+          {% for code,name in encryption_types %}
+          <option value="{{ code }}" {% if enc_filter == code %}selected{% endif %}>{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2 mb-2">
+        <button class="btn btn-primary w-100" type="submit">Filter</button>
+      </div>
+      <div class="col-md-3 mb-2 text-end">
+        <a href="{% url 'vault_add' %}" class="btn btn-success w-100">Add New</a>
+      </div>
+    </form>
+
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Service</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Encryption</th>
+          <th>Notes</th>
+          <th>Tags</th>
+          <th>Steg Images</th>
+          <th>Steg Password(s)</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry.service }}</td>
+          <td>{{ entry.username }}</td>
+          <td>
+            <span id="pw-{{ entry.id }}" {% if request.session.invisible_ink %}class="invisible-ink"{% endif %}>••••••••</span>
+            <button class="btn btn-sm btn-outline-secondary" type="button" onclick="togglePassword({{ entry.id }})">Show/Hide</button>
+          </td>
+          <td>{{ entry.get_encryption_type_display }}</td>
+          <td>{{ entry.notes|linebreaksbr }}</td>
+          <td>{{ entry.tags }}</td>
+          <td>
+            {% for img in entry.steg_images.all %}
+              <a href="{{ img.image.url }}" target="_blank" title="Uploaded {{ img.uploaded_at|date:'Y-m-d H:i' }}">
+                <img src="{{ img.image.url }}" alt="Steg Image" style="height:40px; margin-right:4px; border:1px solid #ccc; border-radius:2px;">
+              </a>
+            {% empty %}
+              <span class="text-muted">None</span>
+            {% endfor %}
+          </td>
+          <td>
+            {% if decrypted_steg_passwords.entry.id %}
+              <ul class="list-unstyled mb-0" style="max-width:200px;">
+                {% for spwd in decrypted_steg_passwords.entry.id %}
+                <li>
+                  <span id="steg-pw-{{ entry.id }}-{{ forloop.counter }}" class="steg-password" style="user-select:none;">••••••••</span>
+                  <button class="btn btn-sm btn-outline-secondary" type="button" onclick="toggleStegPassword({{ entry.id }}, {{ forloop.counter }})">Show/Hide</button>
+                </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </td>
+          <td>{{ entry.created_at|date:"Y-m-d H:i" }}</td>
+          <td>
+            <a class="btn btn-primary btn-sm" href="{% url 'vault_edit' entry.id %}">Edit</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'vault_delete' entry.id %}">Delete</a>
+            <a class="btn btn-info btn-sm" href="{% url 'steg_upload' entry.id %}">Upload Steg</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="10" class="text-center">No entries yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Output the JSON data script tags directly -->
+  {{ decrypted_passwords|json_script:"decrypted-passwords" }}
+  {{ decrypted_steg_passwords|json_script:"decrypted-steg-passwords" }}
+
+  <script>
+    const decryptedPasswords = JSON.parse(document.getElementById('decrypted-passwords').textContent);
+    const decryptedStegPasswords = JSON.parse(document.getElementById('decrypted-steg-passwords').textContent);
+
+    function togglePassword(id) {
+      const span = document.getElementById('pw-' + id);
+      if (span.textContent === '••••••••') {
+        span.textContent = decryptedPasswords[id] || '[Error]';
+      } else {
+        span.textContent = '••••••••';
+      }
+    }
+
+    function toggleStegPassword(entryId, index) {
+      const spanId = `steg-pw-${entryId}-${index}`;
+      const span = document.getElementById(spanId);
+      if (!span) return;
+
+      if (span.textContent === '••••••••') {
+        const pwList = decryptedStegPasswords[entryId] || [];
+        span.textContent = pwList[index - 1] || '[Error]';
+      } else {
+        span.textContent = '••••••••';
+      }
+    }
+  </script>
+</body>
+</html>
