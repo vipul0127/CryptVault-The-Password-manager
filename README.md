@@ -33,22 +33,25 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 ## Extension Section
 
 ### 🌐 **CryptVault Extension Overview**
+![Home Page](cryptimages/c3.jpeg)
 - The **CryptVault Extension** is a browser add-on designed to enhance security and convenience by auto-filling saved credentials on login pages. It communicates exclusively with the local CryptVault application via localhost (e.g., `http://127.0.0.1:8000`), ensuring no data is transmitted over the internet. This offline-first approach minimizes exposure to external threats, making it a robust solution for privacy-conscious users.
 
 ### 🔑 **Extension Login Page**
+![Home Page](cryptimages/c4.jpeg)
 - Upon installation, the extension prompts users to log in with their master password to authenticate with the local CryptVault app.
-  <img src="images/extension-login-page.jpeg" alt="Extension Login" width="400"/>
+
+
 - **Details**: This page ensures secure initialization by validating the master password against the locally stored encrypted database. Only after successful authentication can the extension access and manage credentials.
 
 ### 📋 **Credential Auto-Fill Page**
 - When a user visits a login page (e.g., a website), the extension detects the URL and offers to auto-fill the username and password fields with saved credentials.
-  <img src="images/extension-auto-fill.jpeg" alt="Credential Auto-Fill" width="400"/>
+![Home Page](cryptimages/c1.jpeg)
 - **Details**: The auto-fill feature leverages the Chrome Extension API to match the current webpage URL with stored entries. It fetches encrypted data from the local server, decrypts it in real-time using the master password, and populates the fields securely. Users can select from multiple saved credentials if available for the site.
 
 ### ⚙️ **Extension Settings Page**
 - The settings page allows users to configure auto-fill preferences, manage connected sites, and update the extension’s sync with the CryptVault app.
-  <img src="images/extension-settings.jpeg" alt="Extension Settings" width="400"/>
 - **Details**: This page provides options to enable/disable auto-fill, clear cached data, or re-authenticate with the local app. It ensures users retain control over how and when credentials are accessed, enhancing usability and security.
+ ![Home Page](cryptimages/c2.jpeg)
 
 ---
 
