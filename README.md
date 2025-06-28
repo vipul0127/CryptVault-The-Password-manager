@@ -38,6 +38,7 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 
 ### 🔑 **Extension Login Page**
 ![Home Page](cryptimages/c4.jpeg)
+
 - Upon installation, the extension prompts users to log in with their master password to authenticate with the local CryptVault app.
 
 
@@ -52,6 +53,7 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 - The settings page allows users to configure auto-fill preferences, manage connected sites, and update the extension’s sync with the CryptVault app.
 - **Details**: This page provides options to enable/disable auto-fill, clear cached data, or re-authenticate with the local app. It ensures users retain control over how and when credentials are accessed, enhancing usability and security.
  ![Home Page](cryptimages/c2.jpeg)
+<img src="cryptimages/c2.jpeg" alt="Home Page" width="600"/>
 
 ---
 
