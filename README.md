@@ -8,30 +8,28 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 - This is the first screen users see when they launch CryptVault.
 - It briefly explains what the app does — securely managing passwords offline using AES-256 encryption.
 - The page offers buttons for new user registration or existing user login, guiding them to set up their master password or access their vault.
-
-<img src="images/welcome-page.jpeg" alt="Welcome Page" width="400"/>
+![Home Page](cryptimages/welcome.jpeg)
 ### 🏠 **Home Page**
 - After logging in with the master password, users are redirected to the **Home Page**.
-  <img src="images/app-home.jpeg" alt="Home Page" width="400"/>
 - The **Home Page** provides access to credential management, including viewing, adding, and editing saved credentials.
-
+![Home Page](cryptimages/home.jpeg)
 ---
 
 ### 🔐 **User Login**
 - Users log in using a unique **master password** to access CryptVault.
-  <img src="images/app-login.jpeg" alt="Login" width="400"/>
+![Home Page](cryptimages/login.jpeg)
 
 ---
 
 ### 📝 **Registration**
 - New users can set up CryptVault by creating a **master password** during initial setup.
-  <img src="images/app-registration.jpeg" alt="Registration" width="400"/>
+![Home Page](cryptimages/register.jpeg)
 
 ---
 
 ### ➕ **Add Credential Page**
 - Users can add new credentials (website, username, password) securely on the **Add Credential Page**.
-  <img src="images/app-add-credential.jpeg" alt="Add Credential" width="400"/>
+![Home Page](cryptimages/add.jpeg)
 
 ---
 
@@ -40,14 +38,14 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 - Explains how CryptVault stores all data locally with AES-256 encryption.
 - No cloud, no sync — 100% offline for maximum privacy and control.
 
-<img src="images/privacy-page.jpeg" alt="Privacy Page" width="400"/>
+![Home Page](cryptimages/privacy.jpeg)
 
 ---
 
 ## 📤 Share Page
 - Allows users to export encrypted credentials locally to a file for backup or manual transfer.
 - No online sharing or uploads are allowed, ensuring complete security.
-
+![Home Page](cryptimages/share.jpeg)
 ## Extension Section
 
 ### 🌐 **CryptVault Extension Overview**
