@@ -49,7 +49,7 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 <img src="cryptimages/c1.jpeg" alt="Home Page" width="600"/>
 - **Details**: The auto-fill feature leverages the Chrome Extension API to match the current webpage URL with stored entries. It fetches encrypted data from the local server, decrypts it in real-time using the master password, and populates the fields securely. Users can select from multiple saved credentials if available for the site.
 
-### ⚙️ **⚙️ Autofill Page **
+### ⚙️  **Autofill Page **
 - The Autofill page allows users to view fetched credentials and automatically fill login forms with a single click. It displays stored usernames and passwords (fetched securely from the local CryptVault app) for the active website, offering a seamless and secure login experience.
 - **Details**:This panel shows matching credentials based on the currently open site, along with a “Show” button to reveal the password (after user authentication if needed) and an “Autofill” button to insert credentials directly into the form. Communication is handled locally over localhost, ensuring no sensitive data is exposed to the internet. This feature combines convenience with full user control, reinforcing privacy without compromising usability.
 <img src="cryptimages/c2.jpeg" alt="Home Page" width="600"/>
