@@ -4,7 +4,12 @@
 CryptVault is an offline password manager that prioritizes data privacy with AES-256 encryption and local storage. Featuring a desktop application and a browser extension, it allows users to securely manage and auto-fill credentials without relying on cloud services, offering a robust solution against data breaches.
 
 ## Home Page
+## 👋 Welcome Page
+- This is the first screen users see when they launch CryptVault.
+- It briefly explains what the app does — securely managing passwords offline using AES-256 encryption.
+- The page offers buttons for new user registration or existing user login, guiding them to set up their master password or access their vault.
 
+<img src="images/welcome-page.jpeg" alt="Welcome Page" width="400"/>
 ### 🏠 **Home Page**
 - After logging in with the master password, users are redirected to the **Home Page**.
   <img src="images/app-home.jpeg" alt="Home Page" width="400"/>
