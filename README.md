@@ -30,6 +30,19 @@ CryptVault is an offline password manager that prioritizes data privacy with AES
 
 ---
 
+
+## 🔒 Privacy Page
+- Explains how CryptVault stores all data locally with AES-256 encryption.
+- No cloud, no sync — 100% offline for maximum privacy and control.
+
+<img src="images/privacy-page.jpeg" alt="Privacy Page" width="400"/>
+
+---
+
+## 📤 Share Page
+- Allows users to export encrypted credentials locally to a file for backup or manual transfer.
+- No online sharing or uploads are allowed, ensuring complete security.
+
 ## Extension Section
 
 ### 🌐 **CryptVault Extension Overview**
