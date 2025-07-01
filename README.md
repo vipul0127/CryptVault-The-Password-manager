@@ -1,5 +1,5 @@
 # CryptVault — A Smart Step for Data Privacy in Today’s Digital World
-
+- **Website:** [Cryptvault.Vipul-iiitd.in](https://cryptvault.vipul-iiitd.in)
 ## Summary
 CryptVault is an offline password manager that prioritizes data privacy with AES-256 encryption and local storage. Featuring a desktop application and a browser extension, it allows users to securely manage and auto-fill credentials without relying on cloud services, offering a robust solution against data breaches.
 
